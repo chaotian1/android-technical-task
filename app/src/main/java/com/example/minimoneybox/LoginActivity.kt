@@ -7,7 +7,11 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import com.airbnb.lottie.LottieAnimationView
+import com.airbnb.lottie.LottieDrawable
 import java.util.regex.Pattern
+import android.animation.Animator
+
+
 
 /**
  * A login screen that offers login via email/password.
@@ -22,6 +26,7 @@ class LoginActivity : AppCompatActivity() {
     lateinit var til_name : TextInputLayout
     lateinit var et_name : EditText
     lateinit var pigAnimation : LottieAnimationView
+    lateinit var animator: Animator.AnimatorListener
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,7 +37,21 @@ class LoginActivity : AppCompatActivity() {
     override fun onStart() {
         super.onStart()
         setupAnimation()
+        configAnimation()
     }
+    private fun configAnimation(){
+
+        pigAnimation.addAnimatorListener(object : Animator.AnimatorListener {
+            override fun onAnimationStart(animator: Animator) { pigAnimation.setMaxFrame(109) }
+            override fun onAnimationRepeat(animator: Animator) { /* no operation */ }
+            override fun onAnimationCancel(animator: Animator) { /* no operation */ }
+            override fun onAnimationEnd(animator: Animator) {
+                pigAnimation.playAnimation()
+                pigAnimation.setMinAndMaxFrame(131, 158)
+                pigAnimation.repeatCount = LottieDrawable.INFINITE            }
+        })
+
+            }
 
     private fun setupViews() {
         btn_sign_in = findViewById(R.id.btn_sign_in)
@@ -54,27 +73,31 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun allFieldsValid() : Boolean {
-        var allValid = false
+        var allValid = 2
 
         if (Pattern.matches(EMAIL_REGEX, et_email.text.toString())) {
-            allValid = true
+         //   allValid = true
+            allValid --
         } else {
             til_email.error = getString(R.string.email_address_error)
         }
 
         if (Pattern.matches(PASSWORD_REGEX, et_password.text.toString())) {
-            allValid = true
+        //    allValid = true
+            allValid --
         } else {
             til_password.error = getString(R.string.password_error)
         }
 
-        if (Pattern.matches(NAME_REGEX, et_password.text.toString())) {
-            allValid = true
-        } else {
+        if(!et_name.text.isEmpty()){
+        if (!Pattern.matches(NAME_REGEX, et_name.text.toString())) {
+            allValid ++
             til_email.error = getString(R.string.full_name_error)
+        }}
+        when (allValid){
+            0 -> return true
+            else -> return false
         }
-
-        return allValid
     }
 
     private fun setupAnimation() {
