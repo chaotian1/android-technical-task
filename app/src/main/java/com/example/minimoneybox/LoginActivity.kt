@@ -10,7 +10,8 @@ import com.airbnb.lottie.LottieAnimationView
 import com.airbnb.lottie.LottieDrawable
 import java.util.regex.Pattern
 import android.animation.Animator
-
+import android.content.Intent
+import android.view.View
 
 
 /**
@@ -26,7 +27,7 @@ class LoginActivity : AppCompatActivity() {
     lateinit var til_name : TextInputLayout
     lateinit var et_name : EditText
     lateinit var pigAnimation : LottieAnimationView
-    lateinit var animator: Animator.AnimatorListener
+    val USER_NAME = "userName"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,19 +40,8 @@ class LoginActivity : AppCompatActivity() {
         setupAnimation()
         configAnimation()
     }
-    private fun configAnimation(){
 
-        pigAnimation.addAnimatorListener(object : Animator.AnimatorListener {
-            override fun onAnimationStart(animator: Animator) { pigAnimation.setMaxFrame(109) }
-            override fun onAnimationRepeat(animator: Animator) { /* no operation */ }
-            override fun onAnimationCancel(animator: Animator) { /* no operation */ }
-            override fun onAnimationEnd(animator: Animator) {
-                pigAnimation.playAnimation()
-                pigAnimation.setMinAndMaxFrame(131, 158)
-                pigAnimation.repeatCount = LottieDrawable.INFINITE            }
-        })
 
-            }
 
     private fun setupViews() {
         btn_sign_in = findViewById(R.id.btn_sign_in)
@@ -66,10 +56,17 @@ class LoginActivity : AppCompatActivity() {
         btn_sign_in.setOnClickListener {
             if (allFieldsValid()) {
                 Toast.makeText(this, R.string.input_valid, Toast.LENGTH_LONG).show()
+                sendMessage()
             }
         }
+    }
 
-
+    fun sendMessage() {
+        val message = et_name.text.toString()
+        val intent = Intent(this, UserAccountActivity::class.java).apply {
+            putExtra(USER_NAME, message)
+        }
+        startActivity(intent)
     }
 
     private fun allFieldsValid() : Boolean {
@@ -104,11 +101,22 @@ class LoginActivity : AppCompatActivity() {
         pigAnimation.playAnimation()
     }
 
+    private fun configAnimation(){
+
+        pigAnimation.addAnimatorListener(object : Animator.AnimatorListener {
+            override fun onAnimationStart(animator: Animator) { pigAnimation.setMaxFrame(109) }
+            override fun onAnimationRepeat(animator: Animator) { /* no operation */ }
+            override fun onAnimationCancel(animator: Animator) { /* no operation */ }
+            override fun onAnimationEnd(animator: Animator) {
+                pigAnimation.playAnimation()
+                pigAnimation.setMinAndMaxFrame(131, 158)
+                pigAnimation.repeatCount = LottieDrawable.INFINITE            }
+        })
+    }
+
     companion object {
         val EMAIL_REGEX = "[^@]+@[^.]+\\..+"
         val NAME_REGEX = "[a-zA-Z]{6,30}"
         val PASSWORD_REGEX = "^(?=.*[0-9])(?=.*[A-Z]).{10,50}$"
-        val firstAnim = 0 to 109
-        val secondAnim = 131 to 158
     }
 }

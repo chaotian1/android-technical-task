@@ -1,3 +1,8 @@
+For the Bugs in part A I assigned new constraints to the views and changed the logic of the sendMessage such that the fields could distinguish between optional and required.For the animation I added the animator listener for the purpose of detecting when the animation was completed. Upon starting the animation after frame 109 the listener begins the on animation end logic, which in turn starts the logic relating to the second portion of the animation.
+As for Part B I was unable to do this part. As a junior engineer I do not have much experience implementing retrofit and in the bank other colleagues have implemented useful aspects such as adapters, rxjava or coroutines, all of which I don't have to worry about on a daily basis. I tried to implement <Call>, the vanilla way of implementing Retrofit but ended up running out of time. If I could improve my solution I would add a recycle adapter to the UserAccountActivity. 
+
+
+
 # The Brief:
 
 Create a mini version of the Moneybox app that will allow existing users to login, check their account and add money to their moneybox.
